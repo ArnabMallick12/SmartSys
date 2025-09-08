@@ -1,0 +1,19 @@
+# SmartSys Dependencies
+psutil>=5.9.0
+tkinter  # Usually included with Python
+threading  # Built-in Python module
+queue  # Built-in Python module
+time  # Built-in Python module
+json  # Built-in Python module
+os  # Built-in Python module
+sys  # Built-in Python module
+
+# Development Dependencies
+pytest>=7.0.0
+pytest-cov>=4.0.0
+black>=22.0.0
+flake8>=5.0.0
+
+# Optional: For enhanced GUI features
+Pillow>=9.0.0  # For image handling if needed
+matplotlib>=3.5.0  # For advanced plotting if needed
