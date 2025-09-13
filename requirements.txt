@@ -16,4 +16,5 @@ flake8>=5.0.0
 
 # Optional: For enhanced GUI features
 Pillow>=9.0.0  # For image handling if needed
-matplotlib>=3.5.0  # For advanced plotting if needed
+matplotlib>=3.5.0  # For real-time charts and graphs
+numpy>=1.21.0  # For numerical operations in charts

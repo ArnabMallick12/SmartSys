@@ -33,13 +33,14 @@ class SmartSysApp:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("SmartSys - Real-Time Process and Resource Tracker")
-        self.root.geometry("1200x800")
+        self.root.geometry("1400x900")
         
         # Initialize components
         self.data_queue = queue.Queue()
+        self.request_queue = queue.Queue()  # Queue for GUI requests
         self.system_monitor = SystemMonitor()
         self.data_bridge = DataBridge(self.data_queue)
-        self.gui = MainGUI(self.root, self.data_queue)
+        self.gui = MainGUI(self.root, self.data_queue, self.request_queue)
         
         # Control flags
         self.running = False
@@ -62,13 +63,37 @@ class SmartSysApp:
     
     def _monitor_loop(self):
         """Main monitoring loop that runs in background thread"""
+        # Default filter and sort settings
+        current_filter = ""
+        current_sort = "cpu"
+        current_limit = 50
+        
         while self.running:
             try:
-                # Collect system data
-                system_data = self.system_monitor.get_system_data()
+                # Check for requests from GUI
+                try:
+                    request = self.request_queue.get_nowait()
+                    if request.get('type') == 'process_data':
+                        current_filter = request.get('filter_name', '')
+                        current_sort = request.get('sort_by', 'cpu')
+                        current_limit = request.get('limit', 50)
+                        print(f"Updated filter: '{current_filter}', sort: {current_sort}, limit: {current_limit}")
+                except queue.Empty:
+                    pass  # No requests
                 
-                # Send data to GUI through queue
-                self.data_queue.put(system_data)
+                # Collect system data with current filter/sort settings
+                system_data = self.system_monitor.get_system_data(
+                    filter_name=current_filter,
+                    sort_by=current_sort,
+                    limit=current_limit
+                )
+                
+                # Validate data through bridge
+                if self.data_bridge.validate_data(system_data):
+                    # Send data to GUI through queue
+                    self.data_queue.put(system_data)
+                else:
+                    print("Warning: Invalid system data detected")
                 
                 # Update every 1 second
                 time.sleep(1)
