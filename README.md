@@ -16,7 +16,6 @@ SmartSys is a single Python application that combines real-time system monitorin
   - Memory regions (permissions, addresses, sizes) with Windows-aware fallbacks.
   - ASCII virtual memory layout and numeric heat maps.
   - Trends and potential leak indicators; PID-specific outputs.
-  - Simulated 2-level page table and TLB behavior with address translation examples.
 - Advanced OS Features:
   - File system visualization and disk allocation simulation.
   - IPC overview (shared memory, message queues, semaphores, pipes, sockets).
@@ -76,10 +75,8 @@ DataBridge (validation) → Queues → GUI render (charts, tables, text) → Use
   - Percent: `Mem% = 100 × RSS / PhysMemTotal`.
   - Peak: `max(RSS)` within observation window.
 
-- Page table/TLB (simulated):
-  - `virtual_pages = VMS / page_size`, `resident_pages = RSS / page_size`.
-  - TLB hit rate: if `total_pages ≤ tlb_size` → 0.95; else `0.70 + 0.25 × (tlb_size / total_pages)`.
-  - Miss rate: `1 − hit_rate`; Effective Access Time: `EAT = HitTime + MissRate × MissPenalty`.
+  
+  (Note: Page table and TLB simulations have been removed per project requirement.)
 
 - Deadlock detection:
   - Build resource allocation graph from process usage (CPU, Memory, File_Handles, Network_Socket, Threads, Disk_IO, Priority).

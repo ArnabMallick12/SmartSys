@@ -82,10 +82,7 @@ class MemoryAnalysisGUI:
         
         ttk.Button(button_frame2, text="Memory Visualization", 
                   command=self.visualize_memory_layout).pack(side=tk.LEFT, padx=(0, 5))
-        ttk.Button(button_frame2, text="Page Table Simulation", 
-                  command=self.simulate_page_table).pack(side=tk.LEFT, padx=(0, 5))
-        ttk.Button(button_frame2, text="TLB Simulation", 
-                  command=self.simulate_tlb).pack(side=tk.LEFT, padx=(0, 5))
+        # Removed Page Table and TLB simulations (per project requirement)
         ttk.Button(button_frame2, text="Memory Trends", 
                   command=self.analyze_memory_trends).pack(side=tk.LEFT, padx=(0, 5))
         ttk.Button(button_frame2, text="Clear Results", 
@@ -149,21 +146,7 @@ class MemoryAnalysisGUI:
                                                            height=15, width=80, font=('Courier', 9))
         self.visualization_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         
-        # Page Table Simulation tab
-        self.page_table_frame = ttk.Frame(self.results_notebook)
-        self.results_notebook.add(self.page_table_frame, text="Page Table Simulation")
-        
-        self.page_table_text = scrolledtext.ScrolledText(self.page_table_frame, wrap=tk.WORD, 
-                                                        height=15, width=80, font=('Courier', 9))
-        self.page_table_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        
-        # TLB Simulation tab
-        self.tlb_frame = ttk.Frame(self.results_notebook)
-        self.results_notebook.add(self.tlb_frame, text="TLB Simulation")
-        
-        self.tlb_text = scrolledtext.ScrolledText(self.tlb_frame, wrap=tk.WORD, 
-                                                 height=15, width=80)
-        self.tlb_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        # Removed Page Table and TLB tabs
         
         # Memory Trends tab
         self.trends_frame = ttk.Frame(self.results_notebook)
@@ -408,63 +391,7 @@ What We Can Analyze:
             error_msg = f"Error creating memory visualization: {e}"
             self.visualization_text.after(0, self._update_visualization, error_msg)
     
-    def simulate_page_table(self):
-        """Simulate page table structure"""
-        pid = self.get_current_pid()
-        if pid is None:
-            return
-        
-        self.current_pid = pid
-        self.page_table_text.delete(1.0, tk.END)
-        self.page_table_text.insert(1.0, "Simulating page table structure...\n")
-        
-        # Run analysis in thread
-        self.analysis_thread = threading.Thread(target=self._simulate_page_table_thread, daemon=True)
-        self.analysis_thread.start()
-    
-    def _simulate_page_table_thread(self):
-        """Page table simulation thread"""
-        try:
-            page_table = self.analyzer.simulate_page_table(self.current_pid)
-            
-            # Format results
-            results = self._format_page_table_results(page_table)
-            
-            # Update GUI in main thread
-            self.page_table_text.after(0, self._update_page_table, results)
-            
-        except Exception as e:
-            error_msg = f"Error simulating page table: {e}"
-            self.page_table_text.after(0, self._update_page_table, error_msg)
-    
-    def simulate_tlb(self):
-        """Simulate TLB behavior"""
-        pid = self.get_current_pid()
-        if pid is None:
-            return
-        
-        self.current_pid = pid
-        self.tlb_text.delete(1.0, tk.END)
-        self.tlb_text.insert(1.0, "Simulating TLB behavior...\n")
-        
-        # Run analysis in thread
-        self.analysis_thread = threading.Thread(target=self._simulate_tlb_thread, daemon=True)
-        self.analysis_thread.start()
-    
-    def _simulate_tlb_thread(self):
-        """TLB simulation thread"""
-        try:
-            tlb = self.analyzer.simulate_tlb(self.current_pid)
-            
-            # Format results
-            results = self._format_tlb_results(tlb)
-            
-            # Update GUI in main thread
-            self.tlb_text.after(0, self._update_tlb, results)
-            
-        except Exception as e:
-            error_msg = f"Error simulating TLB: {e}"
-            self.tlb_text.after(0, self._update_tlb, error_msg)
+    # Removed Page Table and TLB simulation actions
     
     def analyze_memory_trends(self):
         """Analyze memory trends"""
@@ -499,43 +426,35 @@ What We Can Analyze:
         """Update summary text"""
         self.summary_text.delete(1.0, tk.END)
         self.summary_text.insert(1.0, text)
-        self.results_notebook.select(0)  # Switch to summary tab
+        self.results_notebook.select(self.summary_frame)
     
     def _update_regions(self, text):
         """Update regions text"""
         self.regions_text.delete(1.0, tk.END)
         self.regions_text.insert(1.0, text)
-        self.results_notebook.select(1)  # Switch to regions tab
+        self.results_notebook.select(self.regions_frame)
     
     def _update_cpu(self, text):
         """Update CPU text"""
         self.cpu_text.delete(1.0, tk.END)
         self.cpu_text.insert(1.0, text)
-        self.results_notebook.select(2)  # Switch to CPU tab
+        self.results_notebook.select(self.cpu_frame)
     
     def _update_visualization(self, text):
         """Update visualization text"""
         self.visualization_text.delete(1.0, tk.END)
         self.visualization_text.insert(1.0, text)
-        self.results_notebook.select(4)  # Switch to visualization tab
+        self.results_notebook.select(self.visualization_frame)
     
-    def _update_page_table(self, text):
-        """Update page table text"""
-        self.page_table_text.delete(1.0, tk.END)
-        self.page_table_text.insert(1.0, text)
-        self.results_notebook.select(5)  # Switch to page table tab
+    # Removed page table updater
     
-    def _update_tlb(self, text):
-        """Update TLB text"""
-        self.tlb_text.delete(1.0, tk.END)
-        self.tlb_text.insert(1.0, text)
-        self.results_notebook.select(6)  # Switch to TLB tab
+    # Removed TLB updater
     
     def _update_trends(self, text):
         """Update trends text"""
         self.trends_text.delete(1.0, tk.END)
         self.trends_text.insert(1.0, text)
-        self.results_notebook.select(7)  # Switch to trends tab
+        self.results_notebook.select(self.trends_frame)
     
     def _format_comprehensive_results(self, analysis):
         """Format comprehensive analysis results"""
@@ -680,93 +599,9 @@ Heat Map Intensity:
 """
         return results
     
-    def _format_page_table_results(self, page_table):
-        """Format page table simulation results"""
-        if 'error' in page_table:
-            return f"Error: {page_table['error']}"
-        
-        sim = page_table['simulation']
-        
-        results = f"""
-Page Table Simulation for PID {page_table['pid']}
-{'='*50}
-
-Page Table Structure:
-{sim['page_table_structure']}
-
-Address Translation Examples:
-"""
-        
-        for i, translation in enumerate(sim['address_translation']['translations'], 1):
-            results += f"""
-Translation {i}:
-- Virtual Address: {translation['virtual_address']}
-- Page Number: {translation['page_number']:,}
-- Frame Number: {translation['frame_number']}
-- Physical Address: {translation['physical_address']}
-- Offset: {translation['offset']}
-"""
-        
-        results += f"""
-Translation Steps:
-"""
-        for step in sim['address_translation']['translation_steps']:
-            results += f"- {step}\n"
-        
-        results += f"""
-Page Fault Statistics:
-- Minor Faults: {sim['page_faults']['minor_faults']:,}
-- Major Faults: {sim['page_faults']['major_faults']:,}
-- Fault Rate: {sim['page_faults']['fault_rate']:.2%}
-
-Fault Types:
-- Demand Paging: {sim['page_faults']['fault_types']['demand_paging']:,}
-- Copy on Write: {sim['page_faults']['fault_types']['copy_on_write']:,}
-- Swap In: {sim['page_faults']['fault_types']['swap_in']:,}
-- Swap Out: {sim['page_faults']['fault_types']['swap_out']:,}
-
-Educational Note: {page_table['educational_note']}
-"""
-        return results
+    # Removed page table formatter
     
-    def _format_tlb_results(self, tlb):
-        """Format TLB simulation results"""
-        if 'error' in tlb:
-            return f"Error: {tlb['error']}"
-        
-        sim = tlb['simulation']
-        
-        results = f"""
-TLB Simulation for PID {tlb['pid']}
-{'='*40}
-
-TLB Configuration:
-- TLB Size: {sim['tlb_size']} entries
-- Page Size: {sim['page_size']:,} bytes
-- Total Pages: {sim['total_pages']:,}
-
-Performance Metrics:
-- Hit Rate: {sim['hit_rate']:.2%}
-- Miss Rate: {sim['miss_rate']:.2%}
-- Replacement Algorithm: {sim['replacement_algorithm']}
-
-Access Patterns:
-- Sequential Access: {sim['access_pattern']['sequential_access']:.1f}%
-- Random Access: {sim['access_pattern']['random_access']:.1f}%
-- Temporal Locality: {sim['access_pattern']['temporal_locality']:.1f}%
-- Spatial Locality: {sim['access_pattern']['spatial_locality']:.1f}%
-
-Hardware Performance:
-- Average Access Time: {sim['performance_metrics']['average_access_time']}
-- Hit Time: {sim['performance_metrics']['hit_time']}
-- Miss Penalty: {sim['performance_metrics']['miss_penalty']}
-- Effective Access Time: {sim['performance_metrics']['effective_access_time']}
-- Speedup Factor: {sim['performance_metrics']['speedup_factor']}
-- Cache Efficiency: {sim['performance_metrics']['cache_efficiency']}
-
-Educational Note: {tlb['educational_note']}
-"""
-        return results
+    # Removed TLB formatter
     
     def _format_memory_trends_results(self, trends):
         """Format memory trends analysis results"""

@@ -557,8 +557,6 @@ class MemoryAnalyzer:
             'memory_layout': self.get_memory_layout_analysis(pid),
             'system_context': self.get_system_memory_context(),
             'memory_visualization': self.visualize_memory_layout(pid),
-            'page_table_simulation': self.simulate_page_table(pid),
-            'tlb_simulation': self.simulate_tlb(pid),
             'memory_trends': self.analyze_memory_trends(pid),
             'educational_notes': {
                 'page_tables': 'Page tables are kernel-internal structures not accessible from user space',

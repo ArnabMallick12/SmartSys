@@ -39,7 +39,7 @@ class AdvancedOSGUI:
         main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
         # Title
-        title_label = ttk.Label(main_frame, text="Advanced OS Features Analysis", 
+        title_label = ttk.Label(main_frame, text="Advanced OS Features", 
                                font=('Arial', 14, 'bold'))
         title_label.pack(pady=(0, 10))
         
