@@ -79,6 +79,8 @@ class MainGUI:
         self.setup_processes_tab()
         self.setup_system_info_tab()
         self.setup_charts_tab()
+        self.setup_memory_analysis_tab()
+        self.setup_advanced_os_tab()
     
     def setup_processes_tab(self):
         """Set up the processes tab"""
@@ -337,6 +339,40 @@ class MainGUI:
         # Initialize chart data for disk and network
         self.chart_data['disk_history'] = []
         self.chart_data['network_history'] = []
+    
+    def setup_advanced_os_tab(self):
+        """Set up the advanced OS features tab"""
+        # Create advanced OS tab
+        advanced_os_tab = ttk.Frame(self.notebook)
+        self.notebook.add(advanced_os_tab, text="Advanced OS")
+        
+        # Configure grid
+        advanced_os_tab.columnconfigure(0, weight=1)
+        advanced_os_tab.rowconfigure(0, weight=1)
+        
+        # Add advanced OS features GUI
+        try:
+            from frontend.advanced_os_gui import AdvancedOSGUI
+            self.advanced_os_gui = AdvancedOSGUI(advanced_os_tab)
+        except ImportError as e:
+            # Fallback if advanced OS GUI is not available
+            error_label = ttk.Label(advanced_os_tab, text=f"Advanced OS Features not available: {e}")
+            error_label.pack(expand=True)
+
+    def setup_memory_analysis_tab(self):
+        """Set up the dedicated Memory Analysis tab (integrates launch_memory_analyze features)"""
+        memory_tab = ttk.Frame(self.notebook)
+        self.notebook.add(memory_tab, text="Memory Analysis")
+        
+        memory_tab.columnconfigure(0, weight=1)
+        memory_tab.rowconfigure(0, weight=1)
+        
+        try:
+            from frontend.memory_analysis_gui import MemoryAnalysisGUI
+            self.memory_analysis_gui = MemoryAnalysisGUI(memory_tab)
+        except ImportError as e:
+            error_label = ttk.Label(memory_tab, text=f"Memory Analysis not available: {e}")
+            error_label.pack(expand=True)
     
     def update_system_metrics(self, data: Dict[str, Any]):
         """Update system metrics display"""
